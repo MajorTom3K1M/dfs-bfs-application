@@ -16,7 +16,6 @@ export const calculatePath = (map, startPos, targetPos, algorithm) => {
         let stack = new Stack();
         stack.push(startNode);
         cameFrom[startNode.id] = null;
-        console.log("IT OK WORK FINE.");
         while (true) {
             current = stack.top();
             path.push(current.id);
@@ -121,13 +120,13 @@ const makeGraph = (map, width, height) => {
                 continue;
             }
             let adj = [];
-            if ((y - 1 >= 0) && map[y - 1][x] === 0) {
+            if ((y - 1 > 0) && map[y - 1][x] === 0) {
                 adj.push('' + x + ',' + (y - 1));
             }
             if ((y + 1 < map.length) && map[y + 1][x] === 0) {
                 adj.push('' + x + ',' + (y + 1));
             }
-            if ((x - 1 >= 0) && map[y][x - 1] === 0) {
+            if ((x - 1 > 0) && map[y][x - 1] === 0) {
                 adj.push('' + (x - 1) + ',' + y);
             }
             if ((x + 1 < map[y].length) && map[y][x + 1] === 0) {
@@ -155,9 +154,8 @@ const buildOptimal = (cameFrom, targetPos) => {
 
     let current = targetPos;
     let path = [];
-
+    
     while (current) {
-        console.log(current);
         path.unshift(current);
         current = cameFrom[current];
     }

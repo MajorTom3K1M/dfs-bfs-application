@@ -4,7 +4,35 @@ import { calculatePath } from './path.js';
 
 $(document).ready(function () {
     let maze = mazeOne;
-    setUpMap(maze);
+    setUpMap(mazeOne);
+    let resetButton = document.getElementById('reset');
+    resetButton.addEventListener("click", () => {
+      reset(maze);
+    });
+
+    let mazeOneButton = document.getElementById('maze-1');
+    mazeOneButton.addEventListener("click", () => {
+      $('#play').off('click');
+      $('#play').attr("disabled", false);
+      maze = mazeOne;
+      setUpMap(mazeOne);
+    });
+
+    let mazeTwoButton = document.getElementById('maze-2');
+    mazeTwoButton.addEventListener("click", () => {
+      $('#play').off('click');
+      $('#play').attr("disabled", false);
+      maze = mazeTwo;
+      setUpMap(mazeTwo);
+    });
+  
+    let mazeThreeButton = document.getElementById('maze-3');
+    mazeThreeButton.addEventListener("click", () => {
+      $('#play').off('click');
+      $('#play').attr("disabled", false);
+      maze = mazeThree;
+      setUpMap(mazeThree);
+    });
 });
 
 const setUpMap = (maze) => {
@@ -16,14 +44,20 @@ const setUpMap = (maze) => {
     let startPos = '0,0';
     let targetPos = `${map.data.length - 1},${map.data.length - 1}`;
     console.log(targetPos);
-    // let pathBFS = [];
+    let pathBFS = [];
     let pathDFS = [];
     drawPath(rendererOne, makePoint(startPos), map.cellWidth, map.cellHeight, 'yellow');
     drawPath(rendererOne, makePoint(targetPos), map.cellWidth, map.cellHeight, '#0f0');
     drawPath(rendererTwo, makePoint(startPos), map.cellWidth, map.cellHeight, 'yellow');
-    drawPath(rendererTwo, makePoint(targetPos), map.cellWidth, map.cellHeight, 'yellow');
-    // pathBFS = calculatePath(map, startPos, targetPos, 'bfs');
+    drawPath(rendererTwo, makePoint(targetPos), map.cellWidth, map.cellHeight, '#0f0');
+    pathBFS = calculatePath(map, startPos, targetPos, 'bfs');
     pathDFS = calculatePath(map, startPos, targetPos, 'dfs');
+    $("#play").on("click", () => {
+        $('#play').attr("disabled", true);
+        $('#reset').attr("disabled", true);
+        runPath(100, pathBFS[0], pathBFS[1], rendererOne, map, startPos, targetPos);
+        runPath(100, pathDFS[0], pathDFS[1], rendererTwo, map, startPos, targetPos);
+    });
 };
 
 const makeMap = (mazeData, width, height) => (
@@ -78,9 +112,31 @@ const makePoint = (point) => (
     point.split(',').map((v) => { return v | 0; })
 );
 
-function test() {
-    console.log('Hello World~!');
-}
+const runPath = (num, path, optimal, renderer, map, startPos, targetPos) => {
+    let pos = 0;
+    function render() {
+        if (pos < path.length) {
+            drawPath(renderer, makePoint(path[pos]), map.cellWidth, map.cellHeight, '#b5c1ff');
+        } else {
+            drawPath(renderer, makePoint(targetPos), map.cellWidth, map.cellHeight, 'blue');
+            optimal.forEach((posi) => {
+                drawPath(renderer, makePoint(posi), map.cellWidth, map.cellHeight, 'blue');
+                $('#reset').attr("disabled", false);
+            });
+            return;
+        }
+        pos += 1;
+        setTimeout(render, num);
+    }
+    renderer.ctx.globalAlpha = 0.55;
+    return render();
+};
+
+const reset = (maze) => {
+    setUpMap(maze);
+    $('#play').attr("disabled", false);
+  };
+  
 
 let mazeTwo = [
     [0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1],

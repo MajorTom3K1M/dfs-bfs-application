@@ -119,3 +119,6 @@ nav ul, nav ol {
     color: #737373;
 }
   
+button#reset, button#play {
+    background-color: #737373;
+}
