@@ -1,8 +1,8 @@
 # DFS-BFS Application
 
-## Description
-
 The **DFS-BFS Application** is a web application that visualizes the Depth-First Search (DFS) and Breadth-First Search (BFS) algorithms through maze. This project is intended as a learning tool to help users understand how DFS and BFS work by providing an interactive and visual representation using JavaScript.
+
+![App Demo](https://github.com/MajorTom3K1M/dfs-bfs-application/blob/master/screenshot/screenshot-1.png)
 
 ## Features
 
